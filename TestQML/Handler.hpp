@@ -24,6 +24,7 @@ public:
 private:
 	void getUpdateFileInfo();
 	void startUpdateDownload(const QString& url, const QString& fileName);
+	void showErrorMessage(QString pTitle, QString pMessage);
 
 private slots:
 	void downloadUpdateProgress(qint64 pReceived, qint64 pTotal);

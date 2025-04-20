@@ -5,6 +5,8 @@ import QtQuick.Window 2.15
 import QtQuick.Controls.Material
 import QtQuick.Dialogs 
 
+import "."
+
 ApplicationWindow {
     id: window
     visible: true
@@ -30,9 +32,11 @@ ApplicationWindow {
         spinnerText.text = "Check for update..."
     }
 
-    function displayCriticalError(pMessage){
-        criticalDialog.text = pMessage
-        criticalDialog.open()
+    function displayMessage(pTitle, pMessage){
+        messageBox.title = pTitle
+        messageBox.message = pMessage;
+        messageBox.visible = true
+        
     }
 
     function setLoginSucceed(){
@@ -53,16 +57,24 @@ ApplicationWindow {
         isLoginFailed = false
         errorText.text = ""
     }
-    MessageDialog {
-        id: criticalDialog
-        title: "Erreur critique"
-        text: "Une erreur s'est produite lors du téléchargement."
+   
+
+    FancyMessageBox {
+        id: messageBox
+        title: "Erreur"
+        message: "Une erreur est survenue pendant la connexion."
+        acceptText: "Réessayer"
+        cancelText: "Annuler"
+        cancellable: true
+
         onAccepted: {
-            console.log("L'utilisateur a fermé la boîte de dialogue.")
+            console.log("Réessayer cliqué")
+        }
+
+        onRejected: {
+            Qt.quit()
         }
     }
-
-    
 
     // Conteneur principal
     Rectangle {
@@ -72,6 +84,8 @@ ApplicationWindow {
         objectName: "mainContainer"
 
         Component.onCompleted: {
+            messageBox.visible = true
+            messageBox.type = "critical"
         }
 
         // Déclarations des états et transitions

@@ -53,6 +53,9 @@
     <None Include="qml\CustomTextInput.qml">
       <Filter>Source Files\qml</Filter>
     </None>
+    <None Include="qml\FancyMessageBox.qml">
+      <Filter>Source Files\qml</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="resources.qrc">

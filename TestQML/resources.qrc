@@ -8,5 +8,6 @@
         <file>img/password.png</file>
         <file>img/user.png</file>
         <file>qml/LauncherLoader.qml</file>
+        <file>qml/FancyMessageBox.qml</file>
     </qresource>
 </RCC>

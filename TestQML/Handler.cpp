@@ -51,6 +51,10 @@ void Handler::onConnectionClicked(QString pUsername, QString pPassword) {
 
 }
 
+void Handler::showErrorMessage(QString pTitle, QString pMessage) {
+	QMetaObject::invokeMethod(mQMLObject, "displayMessage", QVariant(pTitle), QVariant(pMessage));
+}
+
 void Handler::onCheckForUpdate() {
 	qDebug() << "Check for update !!!";
 
@@ -107,7 +111,7 @@ void Handler::getUpdateFileInfo() {
 			mDestinationFile = new QFile(QDir::currentPath() + "/update/" + mUpdateName);
 
 			if (!mDestinationFile->open(QIODevice::WriteOnly)) {
-				qDebug() << "Error opening file for writing: " << mDestinationFile->errorString();
+				showErrorMessage("Error", "Unable to open local update file for writing, error : " + mDestinationFile->errorString());
 				return;
 			}
 
@@ -116,7 +120,7 @@ void Handler::getUpdateFileInfo() {
 			connect(mNetworkManager, &QNetworkAccessManager::finished, this, &Handler::downloadFinished);
 		}
 		else
-			qDebug() << "Error: " << lReply->errorString();
+			showErrorMessage("Error", "Unable to connect to dist server, error : " + lReply->errorString());
 
 		lReply->deleteLater(); // Clean up the reply object
 		});
@@ -176,7 +180,7 @@ void Handler::downloadFinished(QNetworkReply* data) {
 	mDestinationFile->close();
 	mDestinationFile->deleteLater();
 	if (data->error() != QNetworkReply::NoError) {
-		qDebug() << "Download error: " << data->errorString();
+		showErrorMessage("Error while downloading", "An error occured while downloading update, error : " + data->errorString());
 		return;
 	}
 	qDebug() << "Download finished successfully!";

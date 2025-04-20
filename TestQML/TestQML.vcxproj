@@ -113,6 +113,7 @@
   <ItemGroup>
     <None Include="qml\AnimatedButton.qml" />
     <None Include="qml\CustomTextInput.qml" />
+    <None Include="qml\FancyMessageBox.qml" />
     <None Include="qml\LoadingBar.qml" />
     <None Include="qml\main.qml" />
   </ItemGroup>
