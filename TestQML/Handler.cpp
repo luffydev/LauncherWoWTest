@@ -8,13 +8,13 @@ void Handler::onConnectionClicked(QString pUsername, QString pPassword) {
 	userData["username"] = pUsername;
 	userData["password"] = pPassword;
 
-	// Ajouter l'empreinte et convertir en chaîne JSON
+	// Ajouter l'empreinte et convertir en chaÃ®ne JSON
 	QString jsonData = QString("__ENCRYPTED_DATA__") + QJsonDocument(userData).toJson();
 
-	// Mot de passe secret pour le chiffrement (doit être identique côté PHP)
+	// Mot de passe secret pour le chiffrement (doit Ãªtre identique cÃ´tÃ© PHP)
 	QByteArray secretKey = AES_ENCRYPT_KEY;
 
-	// Chiffrer les données avec PBKDF2 et AES-GCM
+	// Chiffrer les donnÃ©es avec PBKDF2 et AES-GCM
 	QByteArray encryptedData = AESGCM::encryptForPHP(jsonData.toUtf8(), secretKey);
 
 	APIHandler::POST("http://192.168.179.81/LauncherUpdate/api_login.php", {
@@ -133,7 +133,7 @@ void Handler::downloadUpdateProgress(qint64 pReceived, qint64 pTotal) {
 	double lPercent = round(((double)pReceived / (double)pTotal) * 100.0);
 
 	if (!mTimer.isValid()) {
-		mTimer.start(); // Démarre le timer la première fois
+		mTimer.start(); // DÃ©marre le timer la premiÃ¨re fois
 	}
 
 	qint64 lElapsed = mTimer.elapsed();
@@ -145,7 +145,7 @@ void Handler::downloadUpdateProgress(qint64 pReceived, qint64 pTotal) {
 		lSpeedBytes = (double)lDeltaBytes / ((double)lElapsed / 1000.0);
 
 	mLastReceived = pReceived;
-	mTimer.restart(); // Redémarre le timer
+	mTimer.restart(); // RedÃ©marre le timer
 
 	QString lSpeedStr;
 

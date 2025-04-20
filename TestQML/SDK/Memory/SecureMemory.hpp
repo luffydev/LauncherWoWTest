@@ -11,93 +11,93 @@
 
 class SecureMemory {
 public:
-    // Alloue un buffer sécurisé qui ne sera pas écrit sur le swap
+    // Alloue un buffer sÃ©curisÃ© qui ne sera pas Ã©crit sur le swap
     static QByteArray allocSecure(int size) {
         QByteArray buffer(size, 0);
-        // Verrouiller la mémoire pour éviter le swap sur disque (équivalent Windows de mlock)
+        // Verrouiller la mÃ©moire pour Ã©viter le swap sur disque (Ã©quivalent Windows de mlock)
         if (!VirtualLock(buffer.data(), buffer.size())) {
-            qWarning() << "Impossible de verrouiller la mémoire (VirtualLock):" << GetLastError();
+            qWarning() << "Impossible de verrouiller la mÃ©moire (VirtualLock):" << GetLastError();
         }
         return buffer;
     }
 
-    // Protège une clé existante
+    // ProtÃ¨ge une clÃ© existante
     static void protectKey(QByteArray& key) {
         if (key.isEmpty()) return;
-        // Verrouiller la mémoire pour éviter le swap
+        // Verrouiller la mÃ©moire pour Ã©viter le swap
         if (!VirtualLock(key.data(), key.size())) {
-            qWarning() << "Impossible de verrouiller la mémoire pour la clé (VirtualLock):" << GetLastError();
+            qWarning() << "Impossible de verrouiller la mÃ©moire pour la clÃ© (VirtualLock):" << GetLastError();
         }
     }
 
-    // Efface et libère une clé de manière sécurisée
+    // Efface et libÃ¨re une clÃ© de maniÃ¨re sÃ©curisÃ©e
     static void releaseKey(QByteArray& key) {
         if (key.isEmpty()) return;
-        // Effacement multi-passes pour éviter les résidus en mémoire
-        // 1. Remplir avec des bytes aléatoires
+        // Effacement multi-passes pour Ã©viter les rÃ©sidus en mÃ©moire
+        // 1. Remplir avec des bytes alÃ©atoires
         RAND_bytes(reinterpret_cast<unsigned char*>(key.data()), key.size());
         // 2. Remplir avec des 1
-        key.fill(0xFF);
+        key.fill(static_cast<unsigned char>(0xFF));
         // 3. Remplir avec des 0
         key.fill(0);
-        // Déverrouiller la mémoire (équivalent Windows de munlock)
+        // DÃ©verrouiller la mÃ©moire (Ã©quivalent Windows de munlock)
         VirtualUnlock(key.data(), key.size());
-        // Réinitialiser le QByteArray
+        // RÃ©initialiser le QByteArray
         key.clear();
     }
 
-    // Désactiver les core dumps (équivalent Windows)
+    // DÃ©sactiver les core dumps (Ã©quivalent Windows)
     static void disableCoreFiles() {
         // Windows utilise des fichiers "minidump" au lieu des core dumps Unix
-        // On peut les désactiver en modifiant le registry ou via API
+        // On peut les dÃ©sactiver en modifiant le registry ou via API
         SetErrorMode(SEM_NOGPFAULTERRORBOX | SEM_FAILCRITICALERRORS);
 
-        // Alternative: désactiver en modifiant le registre de Dr. Watson
-        // Cette partie peut nécessiter des droits admin et est optionnelle
-        // La méthode SetErrorMode ci-dessus est généralement suffisante
+        // Alternative: dÃ©sactiver en modifiant le registre de Dr. Watson
+        // Cette partie peut nÃ©cessiter des droits admin et est optionnelle
+        // La mÃ©thode SetErrorMode ci-dessus est gÃ©nÃ©ralement suffisante
     }
 };
 
 
 class PBKDF2;
 
-// Classe RAII pour la gestion sécurisée des clés cryptographiques
+// Classe RAII pour la gestion sÃ©curisÃ©e des clÃ©s cryptographiques
 class SecureKey {
 private:
     QByteArray key;
     bool isProtected;
 
 public:
-    // Constructeur avec clé existante
+    // Constructeur avec clÃ© existante
     SecureKey(const QByteArray& existingKey) : isProtected(false) {
         key = existingKey;
         SecureMemory::protectKey(key);
         isProtected = true;
     }
 
-    // Constructeur avec dérivation PBKDF2
+    // Constructeur avec dÃ©rivation PBKDF2
     SecureKey(const QByteArray& password, const QByteArray& salt) : isProtected(false) {
 
         
-        // Utiliser PBKDF2 pour dériver la clé
+        // Utiliser PBKDF2 pour dÃ©river la clÃ©
         key = PBKDF2::deriveKey(password, salt);
         SecureMemory::protectKey(key);
         isProtected = true;
     }
 
-    // Destructeur - nettoyage sécurisé de la clé
+    // Destructeur - nettoyage sÃ©curisÃ© de la clÃ©
     ~SecureKey() {
         if (isProtected) {
             SecureMemory::releaseKey(key);
         }
     }
 
-    // Obtenir une référence constante à la clé
+    // Obtenir une rÃ©fÃ©rence constante Ã  la clÃ©
     const QByteArray& getKey() const {
         return key;
     }
 
-    // Interdire la copie pour éviter la duplication de la clé en mémoire
+    // Interdire la copie pour Ã©viter la duplication de la clÃ© en mÃ©moire
     SecureKey(const SecureKey&) = delete;
     SecureKey& operator=(const SecureKey&) = delete;
 };

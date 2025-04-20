@@ -16,9 +16,6 @@ public:
     // Chiffrement AES-GCM standard
     static QByteArray encrypt(const QByteArray& plainText, const SecureKey& key, QByteArray& ivOut, QByteArray& tagOut);
 
-    // Déchiffrement AES-GCM standard
-    static QByteArray decrypt(const QByteArray& cipherText, const QByteArray& key, const QByteArray& iv, const QByteArray& tag);
-
     // Chiffrement avec PBKDF2 pour utilisation avec PHP
     static QByteArray encryptForPHP(const QByteArray& plainText, const QByteArray& password);
 };
@@ -26,11 +23,11 @@ public:
 
 class PBKDF2 {
 public:
-    // Dérive une clé à partir d'un mot de passe en utilisant PBKDF2
+    // DÃ©rive une clÃ© Ã  partir d'un mot de passe en utilisant PBKDF2
     static QByteArray deriveKey(const QByteArray& password, const QByteArray& salt,
         int iterations = 10000, int keyLength = 32);
 
-    // Génère un sel aléatoire pour PBKDF2
+    // GÃ©nÃ¨re un sel alÃ©atoire pour PBKDF2
     static QByteArray generateSalt(int length = 16);
 };
 
@@ -40,8 +37,8 @@ public:
     // Chiffrement standard
     static QByteArray encrypt(const QByteArray& plainText, const QByteArray& iv, QByteArray key);
 
-    // Fonction spéciale pour chiffrer des données pour une utilisation avec PHP
-    // Renvoie une chaîne hexadécimale formatée: salt_hex + iv_hex + encrypted_hex
+    // Fonction spÃ©ciale pour chiffrer des donnÃ©es pour une utilisation avec PHP
+    // Renvoie une chaÃ®ne hexadÃ©cimale formatÃ©e: salt_hex + iv_hex + encrypted_hex
     static QByteArray encryptForPHP(const QByteArray& plainText, const QByteArray& password, int iterations = 10000);
 };
 

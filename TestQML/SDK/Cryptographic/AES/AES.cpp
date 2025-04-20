@@ -5,7 +5,7 @@
 #include <openssl/evp.h>
 #include <openssl/rand.h>
 
-// DÈsactiver les core dumps au chargement de la bibliothËque
+// D√©sactiver les core dumps au chargement de la biblioth√®que
 namespace {
     class CoreDumpDisabler {
     public:
@@ -14,7 +14,7 @@ namespace {
         }
     };
 
-    // Objet statique pour exÈcuter le constructeur au chargement
+    // Objet statique pour ex√©cuter le constructeur au chargement
     static CoreDumpDisabler disabler;
 }
 
@@ -22,17 +22,17 @@ QByteArray AESGCM::encrypt(const QByteArray& plainText, const SecureKey& secureK
 {
     const QByteArray& key = secureKey.getKey();
 
-    // VÈrification de la taille de la clÈ
+    // V√©rification de la taille de la cl√©
     if (key.size() != 32) {
-        qWarning() << "La clÈ doit faire exactement 32 octets (256 bits)";
+        qWarning() << "La cl√© doit faire exactement 32 octets (256 bits)";
         return QByteArray();
     }
 
-    // GÈnÈration d'un IV alÈatoire de 12 octets (96 bits) recommandÈ pour GCM
+    // G√©n√©ration d'un IV al√©atoire de 12 octets (96 bits) recommand√© pour GCM
     ivOut = SecureMemory::allocSecure(12);
     RAND_bytes(reinterpret_cast<unsigned char*>(ivOut.data()), ivOut.size());
 
-    // Buffer pour les donnÈes chiffrÈes
+    // Buffer pour les donn√©es chiffr√©es
     QByteArray cipherText;
     cipherText.resize(plainText.size() + EVP_MAX_BLOCK_LENGTH);
 
@@ -42,7 +42,7 @@ QByteArray AESGCM::encrypt(const QByteArray& plainText, const SecureKey& secureK
     // Contexte OpenSSL
     EVP_CIPHER_CTX* ctx = EVP_CIPHER_CTX_new();
     if (!ctx) {
-        qWarning() << "Erreur lors de la crÈation du contexte OpenSSL";
+        qWarning() << "Erreur lors de la cr√©ation du contexte OpenSSL";
         return QByteArray();
     }
 
@@ -58,7 +58,7 @@ QByteArray AESGCM::encrypt(const QByteArray& plainText, const SecureKey& secureK
         return QByteArray();
     }
 
-    // Chiffrement des donnÈes
+    // Chiffrement des donn√©es
     if (EVP_EncryptUpdate(ctx,
         reinterpret_cast<unsigned char*>(cipherText.data()), &outLen,
         reinterpret_cast<const unsigned char*>(plainText.constData()), plainText.size()) != 1) {
@@ -77,10 +77,10 @@ QByteArray AESGCM::encrypt(const QByteArray& plainText, const SecureKey& secureK
 
     outLen += tmpLen;
 
-    // RÈcupÈration du tag d'authentification
+    // R√©cup√©ration du tag d'authentification
     if (EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_GET_TAG, tagOut.size(),
         reinterpret_cast<unsigned char*>(tagOut.data())) != 1) {
-        qWarning() << "Erreur lors de la rÈcupÈration du tag d'authentification";
+        qWarning() << "Erreur lors de la r√©cup√©ration du tag d'authentification";
         EVP_CIPHER_CTX_free(ctx);
         return QByteArray();
     }
@@ -93,30 +93,30 @@ QByteArray AESGCM::encrypt(const QByteArray& plainText, const SecureKey& secureK
 // Fonction pour chiffrer avec PBKDF2 et AES-GCM pour PHP
 QByteArray AESGCM::encryptForPHP(const QByteArray& plainText, const QByteArray& password)
 {
-    // GÈnÈrer un sel alÈatoire
+    // G√©n√©rer un sel al√©atoire
     QByteArray salt = SecureMemory::allocSecure(16);
     RAND_bytes(reinterpret_cast<unsigned char*>(salt.data()), salt.size());
 
-    // Scope limitÈ pour la clÈ
+    // Scope limit√© pour la cl√©
     {
-        // DÈriver la clÈ avec PBKDF2 et la stocker de maniËre sÈcurisÈe
+        // D√©river la cl√© avec PBKDF2 et la stocker de mani√®re s√©curis√©e
         SecureKey secureKey(password, salt);
 
         // IV et tag pour GCM
         QByteArray iv, tag;
 
-        // Chiffrer les donnÈes
+        // Chiffrer les donn√©es
         QByteArray encryptedData = encrypt(plainText, secureKey.getKey(), iv, tag);
 
         // Format: salt_hex + iv_hex + tag_hex + encrypted_hex
         QByteArray result = salt.toHex() + iv.toHex() + tag.toHex() + encryptedData.toHex();
 
-        // Nettoyer les donnÈes sensibles
+        // Nettoyer les donn√©es sensibles
         SecureMemory::releaseKey(iv);
         SecureMemory::releaseKey(tag);
 
         return result;
-    } // secureKey est automatiquement nettoyÈe ici gr‚ce au destructeur RAII
+    } // secureKey est automatiquement nettoy√©e ici gr√¢ce au destructeur RAII
 }
 
 QByteArray PBKDF2::deriveKey(const QByteArray& password, const QByteArray& salt,
@@ -146,20 +146,20 @@ QByteArray PBKDF2::generateSalt(int length)
     return salt;
 }
 
-// Fonction pour chiffrer et gÈnÈrer une sortie formatÈe pour PHP
+// Fonction pour chiffrer et g√©n√©rer une sortie format√©e pour PHP
 QByteArray AES::encryptForPHP(const QByteArray& plainText, const QByteArray& password, int iterations)
 {
-    // GÈnÈrer un sel alÈatoire
+    // G√©n√©rer un sel al√©atoire
     QByteArray salt = PBKDF2::generateSalt(16);
 
-    // DÈriver la clÈ ‡ partir du mot de passe et du sel
+    // D√©river la cl√© √† partir du mot de passe et du sel
     QByteArray key = PBKDF2::deriveKey(password, salt, iterations);
 
-    // GÈnÈrer un IV alÈatoire
+    // G√©n√©rer un IV al√©atoire
     QByteArray iv(16, 0);
     RAND_bytes(reinterpret_cast<unsigned char*>(iv.data()), iv.size());
 
-    // Chiffrer les donnÈes
+    // Chiffrer les donn√©es
     QByteArray encryptedData = encrypt(plainText, iv, key);
 
     // Format: salt_hex + iv_hex + encrypted_hex
