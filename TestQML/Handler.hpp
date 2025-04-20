@@ -10,6 +10,11 @@
 #include "SDK/Network/ApiHandler.hpp"
 #include "SDK/Cryptographic/AES/AES.hpp"
 
+#define BASE_URL "http://192.168.179.81"
+
+#define UPDATE_INFO_URL	BASE_URL  ##  "/LauncherUpdate/file_info.php"
+#define LOGIN_API_URL BASE_URL  ##  "LauncherUpdate/api_login.php"
+
 
 class Handler : public QObject {  
    Q_OBJECT  
@@ -23,7 +28,7 @@ public:
 
 private:
 	void getUpdateFileInfo();
-	void showErrorMessage(QString pTitle, QString pMessage);
+	void showErrorMessage(QString pTitle, QString pMessage, QString pType = "critical");
 
 private slots:
 	void downloadUpdateProgress(qint64 pReceived, qint64 pTotal);
@@ -31,7 +36,7 @@ private slots:
 	void downloadFinished(QNetworkReply* data);
 
 private:  
-   QObject* mQMLObject, *mMainContainer, *mProgressBar, *mDownloadSpeed;
+   QObject* mQMLObject, *mMainContainer, *mProgressBar, *mDownloadSpeed, *mSpinnerText;
    QNetworkAccessManager* mNetworkManager;
    qint64 mLastReceived = 0;
    QElapsedTimer mTimer;

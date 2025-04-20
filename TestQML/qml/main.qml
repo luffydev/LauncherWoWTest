@@ -32,10 +32,12 @@ ApplicationWindow {
         spinnerText.text = "Check for update..."
     }
 
-    function displayMessage(pTitle, pMessage){
+    function displayMessage(pTitle, pMessage, pType){
+
         messageBox.title = pTitle
-        messageBox.message = pMessage;
+        messageBox.message = pMessage
         messageBox.visible = true
+        messageBox.type = pType
         
     }
 
@@ -84,8 +86,8 @@ ApplicationWindow {
         objectName: "mainContainer"
 
         Component.onCompleted: {
-            messageBox.visible = true
-            messageBox.type = "critical"
+            /*messageBox.visible = true
+            messageBox.type = "critical"*/
         }
 
         // Déclarations des états et transitions
@@ -112,7 +114,7 @@ ApplicationWindow {
                 PropertyChanges { target: spinnerArea; visible: true }
                 PropertyChanges { target: loadingContainer; visible: true }
                 PropertyChanges { target: loadingContainer; opacity: 1.0; }
-                PropertyChanges { target: spinnerText; text: "Downloading Update..." }
+                PropertyChanges { target: spinnerText; text: "Retrieving update infos..." }
             }
         ]
 
@@ -211,6 +213,7 @@ ApplicationWindow {
                     Layout.alignment: Qt.AlignHCenter
                     id: spinnerText
                     font.bold: isLoginSucceed ? true : false
+                    objectName: "spinnerText"
                 }
             }
 

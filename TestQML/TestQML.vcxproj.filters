@@ -39,6 +39,12 @@
     <Filter Include="Source Files\SDK\Memory">
       <UniqueIdentifier>{f1cc5cfb-8fd7-4671-9610-e929566d7650}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\SDK\Config">
+      <UniqueIdentifier>{f1759c23-a2b0-4668-9895-052ee6c0c5b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\SDK\Singleton">
+      <UniqueIdentifier>{9a4f5d1f-bf34-45ea-9e1d-cdf0ece14509}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="qml\main.qml">
@@ -86,6 +92,9 @@
     <ClCompile Include="SDK\Memory\SecureMemory.cpp">
       <Filter>Source Files\SDK\Memory</Filter>
     </ClCompile>
+    <ClCompile Include="SDK\Config\Config.cpp">
+      <Filter>Source Files\SDK\Config</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SDK\Cryptographic\AES\AES.hpp">
@@ -93,6 +102,12 @@
     </ClInclude>
     <ClInclude Include="SDK\Memory\SecureMemory.hpp">
       <Filter>Source Files\SDK\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\Singleton\Singleton.hpp">
+      <Filter>Source Files\SDK\Singleton</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\Config\Config.hpp">
+      <Filter>Source Files\SDK\Config</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

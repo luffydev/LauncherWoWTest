@@ -1,61 +1,13 @@
 #include "Handler.hpp"
 
-void Handler::onConnectionClicked(QString pUsername, QString pPassword) {
-	
-	QMetaObject::invokeMethod(mQMLObject, "resetLoginError");
 
-	QJsonObject userData;
-	userData["username"] = pUsername;
-	userData["password"] = pPassword;
 
-	// Ajouter l'empreinte et convertir en chaîne JSON
-	QString jsonData = QString("__ENCRYPTED_DATA__") + QJsonDocument(userData).toJson();
-
-	// Mot de passe secret pour le chiffrement (doit être identique côté PHP)
-	QByteArray secretKey = AES_ENCRYPT_KEY;
-
-	// Chiffrer les données avec PBKDF2 et AES-GCM
-	QByteArray encryptedData = AESGCM::encryptForPHP(jsonData.toUtf8(), secretKey);
-
-	APIHandler::POST("http://192.168.179.81/LauncherUpdate/api_login.php", {
-		{"data", encryptedData}
-		}, [this](QJsonDocument pDocument) {
-			
-			if (pDocument.isNull()) {
-				qDebug() << "Error: Invalid JSON document.";
-
-				mMainContainer->setProperty("state", QVariant("idle"));
-				QMetaObject::invokeMethod(mQMLObject, "showLoginError", QVariant("Internal Error \r\n Please try again later"));
-
-				return;
-			}
-
-			qDebug() << "Login response: " << pDocument.toJson();
-
-			if (pDocument["status"].toString() == "success") {
-				qDebug() << "Login successful!";
-				mQMLObject->setProperty("loginStatus", QVariant("success"));
-
-				QMetaObject::invokeMethod(mQMLObject, "setLoginSucceed");
-
-			}
-			else {
-				qDebug() << "Login failed!";
-				mQMLObject->setProperty("loginStatus", QVariant("failed"));
-
-				mMainContainer->setProperty("state", QVariant("idle"));
-				QMetaObject::invokeMethod(mQMLObject, "showLoginError", QVariant("Invalid Credential !"));
-			}
-
-		});
-
-}
-
-void Handler::showErrorMessage(QString pTitle, QString pMessage) {
-	QMetaObject::invokeMethod(mQMLObject, "displayMessage", QVariant(pTitle), QVariant(pMessage));
+void Handler::showErrorMessage(QString pTitle, QString pMessage, QString pType) {
+	QMetaObject::invokeMethod(mQMLObject, "displayMessage", QVariant(pTitle), QVariant(pMessage), QVariant(pType));
 }
 
 void Handler::onCheckForUpdate() {
+
 	qDebug() << "Check for update !!!";
 
 	if (mQMLObject) {
@@ -67,15 +19,18 @@ void Handler::onCheckForUpdate() {
 		mMainContainer = mQMLObject->findChild<QObject*>("mainContainer");
 		mProgressBar = mQMLObject->findChild<QObject*>("loadingBar");
 		mDownloadSpeed = mQMLObject->findChild<QObject*>("downloadSpeed");
+		mSpinnerText = mQMLObject->findChild<QObject*>("spinnerText");
 		mMainContainer->setProperty("state", QVariant("updating"));
 	}
+
 }
 
 void Handler::getUpdateFileInfo() {
 
 	qDebug() << "Get update file info !!!";
 
-	const QUrl lUrl("http://192.168.179.81/LauncherUpdate/file_info.php");
+	const QUrl lUrl(UPDATE_INFO_URL);
+
 	QNetworkRequest lRequest(lUrl);
 
 	lRequest.setRawHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3");
@@ -87,6 +42,9 @@ void Handler::getUpdateFileInfo() {
 
 		if (lReply->error() == QNetworkReply::NoError)
 		{
+
+			mSpinnerText->setProperty("text", "Downloading update...");
+
 			QByteArray lData = lReply->readAll();
 			QJsonParseError lError;
 
@@ -186,6 +144,57 @@ void Handler::downloadFinished(QNetworkReply* data) {
 	qDebug() << "Download finished successfully!";
 
 	mMainContainer->setProperty("state", QVariant("idle"));
+}
+
+void Handler::onConnectionClicked(QString pUsername, QString pPassword) {
+
+	QMetaObject::invokeMethod(mQMLObject, "resetLoginError");
+
+	QJsonObject userData;
+	userData["username"] = pUsername;
+	userData["password"] = pPassword;
+
+	// Ajouter l'empreinte et convertir en chaîne JSON
+	QString jsonData = QString("__ENCRYPTED_DATA__") + QJsonDocument(userData).toJson();
+
+	// Mot de passe secret pour le chiffrement (doit être identique côté PHP)
+	QByteArray secretKey = AES_ENCRYPT_KEY;
+
+	// Chiffrer les données avec PBKDF2 et AES-GCM
+	QByteArray encryptedData = AESGCM::encryptForPHP(jsonData.toUtf8(), secretKey);
+
+	APIHandler::POST(LOGIN_API_URL, {
+		{"data", encryptedData}
+		}, [this](QJsonDocument pDocument) {
+
+			if (pDocument.isNull()) {
+				qDebug() << "Error: Invalid JSON document.";
+
+				mMainContainer->setProperty("state", QVariant("idle"));
+				QMetaObject::invokeMethod(mQMLObject, "showLoginError", QVariant("Internal Error \r\n Please try again later"));
+
+				return;
+			}
+
+			qDebug() << "Login response: " << pDocument.toJson();
+
+			if (pDocument["status"].toString() == "success") {
+				qDebug() << "Login successful!";
+				mQMLObject->setProperty("loginStatus", QVariant("success"));
+
+				QMetaObject::invokeMethod(mQMLObject, "setLoginSucceed");
+
+			}
+			else {
+				qDebug() << "Login failed!";
+				mQMLObject->setProperty("loginStatus", QVariant("failed"));
+
+				mMainContainer->setProperty("state", QVariant("idle"));
+				QMetaObject::invokeMethod(mQMLObject, "showLoginError", QVariant("Invalid Credential !"));
+			}
+
+		});
+
 }
 
 void Handler::setQmlObject(QObject* pObject) {

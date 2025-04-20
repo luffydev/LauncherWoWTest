@@ -106,6 +106,7 @@
       <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Release|x64'">input</DynamicSource>
       <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(Filename).moc</QtMocFileName>
     </ClCompile>
+    <ClCompile Include="SDK\Config\Config.cpp" />
     <ClCompile Include="SDK\Cryptographic\AES\AES.cpp" />
     <ClCompile Include="SDK\Memory\SecureMemory.cpp" />
     <ClCompile Include="SDK\Network\ApiHandler.cpp" />
@@ -130,8 +131,10 @@
     <QtMoc Include="SDK\Network\ApiHandler.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="SDK\Config\Config.hpp" />
     <ClInclude Include="SDK\Cryptographic\AES\AES.hpp" />
     <ClInclude Include="SDK\Memory\SecureMemory.hpp" />
+    <ClInclude Include="SDK\Singleton\Singleton.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
