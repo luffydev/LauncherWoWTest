@@ -176,7 +176,7 @@ ApplicationWindow {
             // Message d'erreur
             Text {
                 id: errorText
-                objectName: errorText
+                objectName: "errorText"
                 text: "Nom d'utilisateur ou mot de passe incorrect !"
                 color: "#e74c3c"
                 font.pixelSize: 16

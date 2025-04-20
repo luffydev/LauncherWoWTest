@@ -34,17 +34,4 @@ Button {
         NumberAnimation { duration: 150; easing.type: Easing.OutCubic }
     }
 
-    /*MouseArea {
-        anchors.fill: parent
-        hoverEnabled: true
-        onEntered: btn.scale = 1.20
-        onExited: btn.scale = 1.0
-        cursorShape: Qt.PointingHandCursor
-
-        // Lors du clic, émettre le signal
-        onClicked: {
-            onButtonClicked()  // Émet le signal
-            console.debug("test");
-        }
-    }*/
 }
