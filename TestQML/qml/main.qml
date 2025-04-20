@@ -22,7 +22,7 @@ ApplicationWindow {
     Material.accent: "#00BCD4"
 
     property bool isLoginFailed: false
-    property bool isLoginSucceed: true
+    property bool isLoginSucceed: false
 
     property int downloadSpeed: 0  // Débit de téléchargement en Ko/s
 
@@ -33,6 +33,15 @@ ApplicationWindow {
     function displayCriticalError(pMessage){
         criticalDialog.text = pMessage
         criticalDialog.open()
+    }
+
+    function setLoginSucceed(){
+        isLoginSucceed = true
+        isLoginFailed = false
+
+        spinnerText.text = "Login complete... "
+
+        console.log("LoginSucceed called ! ");
     }
 
     function showLoginError(pError){
@@ -183,10 +192,11 @@ ApplicationWindow {
 
                 Text {
                     text: "Checking for update..."
-                    color: "white"
+                    color: isLoginSucceed ? "#11ab24" : "white"
                     font.pixelSize: 14
                     Layout.alignment: Qt.AlignHCenter
                     id: spinnerText
+                    font.bold: isLoginSucceed ? true : false
                 }
             }
 

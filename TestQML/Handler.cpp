@@ -35,6 +35,9 @@ void Handler::onConnectionClicked(QString pUsername, QString pPassword) {
 			if (pDocument["status"].toString() == "success") {
 				qDebug() << "Login successful!";
 				mQMLObject->setProperty("loginStatus", QVariant("success"));
+
+				QMetaObject::invokeMethod(mQMLObject, "setLoginSucceed");
+
 			}
 			else {
 				qDebug() << "Login failed!";

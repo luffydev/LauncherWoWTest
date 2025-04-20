@@ -24,19 +24,19 @@
     <Filter Include="Source Files\qml">
       <UniqueIdentifier>{74b82f3b-3249-42ef-b292-fe893b3374d3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files\SDK">
+    <Filter Include="Source Files\SDK">
       <UniqueIdentifier>{29e940e0-4029-4137-b48c-63b71c4df32d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files\SDK\Network">
+    <Filter Include="Source Files\SDK\Network">
       <UniqueIdentifier>{0d67661b-7931-4e03-9ba0-25d086c44b2d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files\SDK\Cryptographic">
+    <Filter Include="Source Files\SDK\Cryptographic">
       <UniqueIdentifier>{7f1e0c65-734b-47b8-b5e5-91dff20c0de3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files\SDK\Cryptographic\AES">
+    <Filter Include="Source Files\SDK\Cryptographic\AES">
       <UniqueIdentifier>{727b9414-04de-447d-ab15-9eb6ed411d51}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files\SDK\Memory">
+    <Filter Include="Source Files\SDK\Memory">
       <UniqueIdentifier>{f1cc5cfb-8fd7-4671-9610-e929566d7650}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -64,7 +64,7 @@
       <Filter>Source Files</Filter>
     </QtMoc>
     <QtMoc Include="SDK\Network\ApiHandler.hpp">
-      <Filter>Resource Files\SDK\Network</Filter>
+      <Filter>Source Files\SDK\Network</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
@@ -75,21 +75,21 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SDK\Network\ApiHandler.cpp">
-      <Filter>Resource Files\SDK\Network</Filter>
+      <Filter>Source Files\SDK\Network</Filter>
     </ClCompile>
     <ClCompile Include="SDK\Cryptographic\AES\AES.cpp">
-      <Filter>Resource Files\SDK\Cryptographic\AES</Filter>
+      <Filter>Source Files\SDK\Cryptographic\AES</Filter>
     </ClCompile>
     <ClCompile Include="SDK\Memory\SecureMemory.cpp">
-      <Filter>Resource Files\SDK\Memory</Filter>
+      <Filter>Source Files\SDK\Memory</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SDK\Cryptographic\AES\AES.hpp">
-      <Filter>Resource Files\SDK\Cryptographic\AES</Filter>
+      <Filter>Source Files\SDK\Cryptographic\AES</Filter>
     </ClInclude>
     <ClInclude Include="SDK\Memory\SecureMemory.hpp">
-      <Filter>Resource Files\SDK\Memory</Filter>
+      <Filter>Source Files\SDK\Memory</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
