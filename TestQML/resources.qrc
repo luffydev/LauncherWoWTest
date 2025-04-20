@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/AnimatedButton.qml</file>
+        <file>qml/LoadingBar.qml</file>
+        <file>qml/main.qml</file>
+        <file>qml/logo.png</file>
+        <file>qml/CustomTextInput.qml</file>
+        <file>img/password.png</file>
+        <file>img/user.png</file>
+        <file>qml/LauncherLoader.qml</file>
+    </qresource>
+</RCC>

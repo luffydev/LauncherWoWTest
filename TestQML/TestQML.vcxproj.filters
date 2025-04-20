@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>qml;cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>qrc;rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Form Files">
+      <UniqueIdentifier>{99349809-55BA-4b9d-BF79-8FDBB0286EB3}</UniqueIdentifier>
+      <Extensions>ui</Extensions>
+    </Filter>
+    <Filter Include="Translation Files">
+      <UniqueIdentifier>{639EADAA-A684-42e4-A9AD-28FC9BCB8F7C}</UniqueIdentifier>
+      <Extensions>ts</Extensions>
+    </Filter>
+    <Filter Include="Source Files\qml">
+      <UniqueIdentifier>{74b82f3b-3249-42ef-b292-fe893b3374d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\SDK">
+      <UniqueIdentifier>{29e940e0-4029-4137-b48c-63b71c4df32d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\SDK\Network">
+      <UniqueIdentifier>{0d67661b-7931-4e03-9ba0-25d086c44b2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\SDK\Cryptographic">
+      <UniqueIdentifier>{7f1e0c65-734b-47b8-b5e5-91dff20c0de3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\SDK\Cryptographic\AES">
+      <UniqueIdentifier>{727b9414-04de-447d-ab15-9eb6ed411d51}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\SDK\Memory">
+      <UniqueIdentifier>{f1cc5cfb-8fd7-4671-9610-e929566d7650}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="qml\main.qml">
+      <Filter>Source Files\qml</Filter>
+    </None>
+    <None Include="qml\AnimatedButton.qml">
+      <Filter>Source Files\qml</Filter>
+    </None>
+    <None Include="qml\LoadingBar.qml">
+      <Filter>Source Files\qml</Filter>
+    </None>
+    <None Include="qml\CustomTextInput.qml">
+      <Filter>Source Files\qml</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="resources.qrc">
+      <Filter>Source Files</Filter>
+    </QtRcc>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="Handler.hpp">
+      <Filter>Source Files</Filter>
+    </QtMoc>
+    <QtMoc Include="SDK\Network\ApiHandler.hpp">
+      <Filter>Resource Files\SDK\Network</Filter>
+    </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Handler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SDK\Network\ApiHandler.cpp">
+      <Filter>Resource Files\SDK\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="SDK\Cryptographic\AES\AES.cpp">
+      <Filter>Resource Files\SDK\Cryptographic\AES</Filter>
+    </ClCompile>
+    <ClCompile Include="SDK\Memory\SecureMemory.cpp">
+      <Filter>Resource Files\SDK\Memory</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="SDK\Cryptographic\AES\AES.hpp">
+      <Filter>Resource Files\SDK\Cryptographic\AES</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\Memory\SecureMemory.hpp">
+      <Filter>Resource Files\SDK\Memory</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
