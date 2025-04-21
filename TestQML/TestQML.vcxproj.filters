@@ -75,6 +75,9 @@
     <QtMoc Include="SDK\Network\ApiHandler.hpp">
       <Filter>Source Files\SDK\Network</Filter>
     </QtMoc>
+    <QtMoc Include="SDK\Config\Config.hpp">
+      <Filter>Source Files\SDK\Config</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Handler.cpp">
@@ -105,9 +108,6 @@
     </ClInclude>
     <ClInclude Include="SDK\Singleton\Singleton.hpp">
       <Filter>Source Files\SDK\Singleton</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\Config\Config.hpp">
-      <Filter>Source Files\SDK\Config</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

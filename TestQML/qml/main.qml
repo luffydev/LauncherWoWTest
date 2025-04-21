@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.15
 import QtQuick.Window 2.15
 import QtQuick.Controls.Material
 import QtQuick.Dialogs 
+import Launcher.Config 1.0
 
 import "."
 
@@ -12,7 +13,7 @@ ApplicationWindow {
     visible: true
     width: 600
     height: 600
-    title: "Launcher animé"
+    title: Config.getConfig("app_title").toString()
     color: "#1e1e1e"
 
     maximumHeight: 600
@@ -86,8 +87,6 @@ ApplicationWindow {
         objectName: "mainContainer"
 
         Component.onCompleted: {
-            /*messageBox.visible = true
-            messageBox.type = "critical"*/
         }
 
         // Déclarations des états et transitions

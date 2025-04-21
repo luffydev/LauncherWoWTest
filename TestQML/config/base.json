@@ -1,0 +1,11 @@
+{
+    "current_version": "0.0.1",
+    "build_date": "000000000",
+    "version_name": "canary",
+    "app_title": "Mon launcher",
+    "api": {
+      "url": "http://192.168.179.81",
+      "login_endpoint": "/LauncherUpdate/api_login.php",
+      "update_endpoint": "/LauncherUpdate/file_info.php"
+    }
+}

@@ -1,7 +1,7 @@
 #include "ApiHandler.hpp"
 
 
-void APIHandler::GET(const QString& url, const QMap<QString, QString>& params, const std::function<void(QJsonDocument)>& pCallback)
+void APIHandler::GET(const QString& url, const QMap<QString, QString>& params, const std::function<void(QJsonDocument, bool, QString)>& pCallback)
 {
    QUrl lUrl(url);
    QUrlQuery lQuery;
@@ -27,17 +27,25 @@ void APIHandler::GET(const QString& url, const QMap<QString, QString>& params, c
 		   QByteArray lData = lReply->readAll();
 		   QJsonParseError lError;
 		   QJsonDocument lDocument = QJsonDocument::fromJson(lData, &lError);
+
 		   if (lError.error == QJsonParseError::NoError) {
-			   pCallback(lDocument);
+			   pCallback(lDocument, false, "");
 		   }
 		   else {
+
+			   pCallback(QJsonDocument(), true, lError.errorString());
 			   qDebug() << "JSON Parse Error: " << lError.errorString();
 		   }
 	   }
 	   else {
+
+		   pCallback(QJsonDocument(), true, lReply->errorString());
 		   qDebug() << "Network Error: " << lReply->errorString();
+
 	   }
+
 	   lReply->deleteLater(); // Clean up the reply object
+
 	   });
 }
 

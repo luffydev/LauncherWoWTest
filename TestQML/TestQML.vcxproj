@@ -131,7 +131,7 @@
     <QtMoc Include="SDK\Network\ApiHandler.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="SDK\Config\Config.hpp" />
+    <QtMoc Include="SDK\Config\Config.hpp" />
     <ClInclude Include="SDK\Cryptographic\AES\AES.hpp" />
     <ClInclude Include="SDK\Memory\SecureMemory.hpp" />
     <ClInclude Include="SDK\Singleton\Singleton.hpp" />

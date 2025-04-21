@@ -9,5 +9,6 @@
         <file>img/user.png</file>
         <file>qml/LauncherLoader.qml</file>
         <file>qml/FancyMessageBox.qml</file>
+        <file>config/base.json</file>
     </qresource>
 </RCC>

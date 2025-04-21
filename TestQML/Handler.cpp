@@ -1,5 +1,5 @@
 #include "Handler.hpp"
-
+#include "SDK/Config/Config.hpp"
 
 
 void Handler::showErrorMessage(QString pTitle, QString pMessage, QString pType) {
@@ -29,59 +29,42 @@ void Handler::getUpdateFileInfo() {
 
 	qDebug() << "Get update file info !!!";
 
-	const QUrl lUrl(UPDATE_INFO_URL);
+	QJsonObject lApi = Config::instance().getConfig("api").toObject();
 
-	QNetworkRequest lRequest(lUrl);
+	APIHandler::GET(lApi["url"].toString() + lApi["update_endpoint"].toString(), {
+	{"version", Config::instance().getConfig("current_version").toString()}}, 
+	[this, lApi](QJsonDocument pDocument, bool pHasError, QString pErrorString) 
+	{
 
-	lRequest.setRawHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3");
-	lRequest.setRawHeader("Accept", "application/json");
-
-	QNetworkReply* lReply = mNetworkManager->get(lRequest);
-
-	connect(lReply, &QNetworkReply::finished, this, [this, lReply]() {
-
-		if (lReply->error() == QNetworkReply::NoError)
-		{
-
-			mSpinnerText->setProperty("text", "Downloading update...");
-
-			QByteArray lData = lReply->readAll();
-			QJsonParseError lError;
-
-			QJsonDocument lDocument = QJsonDocument::fromJson(lData);
-
-			qDebug() << " Recv Update file size : " << lDocument["file_size"].toInteger();
-
-			mUpdateName = lDocument["file_name"].toString();
-			QNetworkRequest lRequest(lDocument["file_url"].toString());
-
-
-			mMainContainer->setProperty("state", QVariant("updating"));
-
-			QNetworkReply* lReply = mNetworkManager->get(lRequest);
-
-			QString lFile = QDir::currentPath() + "/update/" + mUpdateName;
-
-			if (QFile::exists(lFile)) {
-				QFile::remove(lFile);
-			}
-
-			mDestinationFile = new QFile(QDir::currentPath() + "/update/" + mUpdateName);
-
-			if (!mDestinationFile->open(QIODevice::WriteOnly)) {
-				showErrorMessage("Error", "Unable to open local update file for writing, error : " + mDestinationFile->errorString());
-				return;
-			}
-
-			connect(lReply, &QNetworkReply::downloadProgress, this, &Handler::downloadUpdateProgress);
-			connect(lReply, &QNetworkReply::readyRead, this, &Handler::readyRead);
-			connect(mNetworkManager, &QNetworkAccessManager::finished, this, &Handler::downloadFinished);
+		if (pHasError) {
+			showErrorMessage("Error", "Unable to connect to dist server, error : " + pErrorString);
+			return;
 		}
-		else
-			showErrorMessage("Error", "Unable to connect to dist server, error : " + lReply->errorString());
 
-		lReply->deleteLater(); // Clean up the reply object
-		});
+		mSpinnerText->setProperty("text", "Downloading update...");
+		mUpdateName = pDocument["file_name"].toString();
+
+		QNetworkRequest lRequest(pDocument["file_url"].toString());
+		mMainContainer->setProperty("state", QVariant("updating"));
+
+		QNetworkReply* lReply = mNetworkManager->get(lRequest);
+		QString lFile = QDir::currentPath() + "/update/" + mUpdateName;
+
+		if (QFile::exists(lFile)) 
+			QFile::remove(lFile);
+
+		mDestinationFile = new QFile(QDir::currentPath() + "/update/" + mUpdateName);
+
+		if (!mDestinationFile->open(QIODevice::WriteOnly)) {
+			showErrorMessage("Error", "Unable to open local update file for writing, error : " + mDestinationFile->errorString());
+			return;
+		}
+
+		connect(lReply, &QNetworkReply::downloadProgress, this, &Handler::downloadUpdateProgress);
+		connect(lReply, &QNetworkReply::readyRead, this, &Handler::readyRead);
+		connect(mNetworkManager, &QNetworkAccessManager::finished, this, &Handler::downloadFinished);
+
+	});
 }
 
 void Handler::downloadUpdateProgress(qint64 pReceived, qint64 pTotal) {
@@ -157,13 +140,15 @@ void Handler::onConnectionClicked(QString pUsername, QString pPassword) {
 	// Ajouter l'empreinte et convertir en chaîne JSON
 	QString jsonData = QString("__ENCRYPTED_DATA__") + QJsonDocument(userData).toJson();
 
+	QJsonObject lApi = Config::instance().getConfig("api").toObject();
+
 	// Mot de passe secret pour le chiffrement (doit être identique côté PHP)
 	QByteArray secretKey = AES_ENCRYPT_KEY;
 
 	// Chiffrer les données avec PBKDF2 et AES-GCM
 	QByteArray encryptedData = AESGCM::encryptForPHP(jsonData.toUtf8(), secretKey);
 
-	APIHandler::POST(LOGIN_API_URL, {
+	APIHandler::POST(lApi["url"].toString() + lApi["login_endpoint"].toString(), {
 		{"data", encryptedData}
 		}, [this](QJsonDocument pDocument) {
 
